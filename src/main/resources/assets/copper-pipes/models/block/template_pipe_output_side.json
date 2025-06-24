@@ -27,7 +27,7 @@
 				"south": {"uv": [11, 5, 5, 11], "rotation": 90, "texture": "#tip"},
 				"west": {"uv": [0, 6, 9, 12], "texture": "#pipe"},
 				"up": {"uv": [10, 5, 16, 14], "texture": "#pipe"},
-				"down": {"uv": [16, 14, 10, 5], "texture": "#pipe", "cullface": "north"}
+				"down": {"uv": [16, 14, 10, 5], "texture": "#pipe"}
 			}
 		}
 	]
