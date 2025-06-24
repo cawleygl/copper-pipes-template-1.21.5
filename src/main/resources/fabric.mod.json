@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "copper-pipes",
+	"version": "1.0.0",
+	"name": "Copper Pipes",
+	"description": "Adds Pipes, a redstone component that moves items automatically without collecting loose items or pulling items from chests.",
+	"authors": [
+		"BlueSteel42"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/copper-pipes/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"bluesteel42.copperpipes.CopperPipes"
+		],
+		"client": [
+			"bluesteel42.copperpipes.CopperPipesClient"
+		],
+		"fabric-datagen": [
+			"bluesteel42.copperpipes.CopperPipesDataGenerator"
+		]
+	},
+	"mixins": [
+		"copper-pipes.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

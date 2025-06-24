@@ -1,0 +1,91 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_output_down"
+      },
+      "when": {
+        "facing": "down"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_output_side",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_output_side"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_output_side",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_output_side",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_input_top"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_input_side"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_input_side",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_input_side",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "copper-pipes:block/exposed_pipe_input_side",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}
+

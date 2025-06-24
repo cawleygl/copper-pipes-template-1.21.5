@@ -1,0 +1,11 @@
+{
+  "block.copper-pipes.pipe": "Pipe",
+  "block.copper-pipes.exposed_pipe": "Exposed Pipe",
+  "block.copper-pipes.weathered_pipe": "Weathered Pipe",
+  "block.copper-pipes.oxidized_pipe": "Oxidized Pipe",
+  "block.copper-pipes.waxed_pipe": "Waxed Pipe",
+  "block.copper-pipes.waxed_exposed_pipe": "Waxed Exposed Pipe",
+  "block.copper-pipes.waxed_weathered_pipe": "Waxed Weathered Pipe",
+  "block.copper-pipes.waxed_oxidized_pipe": "Waxed Oxidized Pipe",
+  "container.pipe": "Item Transport Pipe"
+}

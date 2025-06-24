@@ -1,0 +1,7 @@
+{
+  "parent": "copper-pipes:block/template_pipe_input_side",
+  "textures": {
+    "tip": "minecraft:block/exposed_chiseled_copper",
+    "pipe": "copper-pipes:block/exposed_pipe"
+  }
+}
