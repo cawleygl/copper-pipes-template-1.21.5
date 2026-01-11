@@ -11,18 +11,17 @@ import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
-public class ItemPipeDropBehavior implements DispenserBehavior {
+public class ItemPipeDropBehavior {
     private static final int field_51916 = 6;
 
-    @Override
-    public ItemStack dispense(BlockPointer blockPointer, ItemStack itemStack) {
+    public ItemStack dispense(PipeBlockPointer blockPointer, ItemStack itemStack) {
         ItemStack itemStack2 = this.dispenseSilently(blockPointer, itemStack);
         this.playSound(blockPointer);
         this.spawnParticles(blockPointer, blockPointer.state().get(CopperPipeBlock.FACING));
         return itemStack2;
     }
 
-    protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
+    protected ItemStack dispenseSilently(PipeBlockPointer pointer, ItemStack stack) {
         Direction direction = pointer.state().get(CopperPipeBlock.FACING);
         Position position = CopperPipeBlock.getOutputLocation(pointer);
         ItemStack itemStack = stack.split(1);
@@ -50,7 +49,7 @@ public class ItemPipeDropBehavior implements DispenserBehavior {
         world.spawnEntity(itemEntity);
     }
 
-    protected void playSound(BlockPointer pointer) {
+    protected void playSound(PipeBlockPointer pointer) {
         World world = pointer.world();
         if (!world.isClient()) {
             // Play a custom sound
@@ -65,7 +64,7 @@ public class ItemPipeDropBehavior implements DispenserBehavior {
         }
     }
 
-    protected void spawnParticles(BlockPointer pointer, Direction side) {
+    protected void spawnParticles(PipeBlockPointer pointer, Direction side) {
         pointer.world().syncWorldEvent(WorldEvents.CRAFTER_SHOOTS, pointer.pos(), side.getIndex());
     }
 }

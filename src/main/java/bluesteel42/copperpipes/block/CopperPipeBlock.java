@@ -13,7 +13,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
@@ -40,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class CopperPipeBlock extends BlockWithEntity {
     public static final MapCodec<CopperPipeBlock> CODEC = RecordCodecBuilder.mapCodec(
@@ -236,11 +234,11 @@ public class CopperPipeBlock extends BlockWithEntity {
         return false;
     }
 
-    public static Position getOutputLocation(BlockPointer pointer) {
+    public static Position getOutputLocation(PipeBlockPointer pointer) {
         return getOutputLocation(pointer, 0.7, Vec3d.ZERO);
     }
 
-    public static Position getOutputLocation(BlockPointer pointer, double facingOffset, Vec3d constantOffset) {
+    public static Position getOutputLocation(PipeBlockPointer pointer, double facingOffset, Vec3d constantOffset) {
         Direction direction = pointer.state().get(FACING);
         return pointer.centerPos()
                 .add(

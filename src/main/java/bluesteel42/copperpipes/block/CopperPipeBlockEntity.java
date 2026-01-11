@@ -2,7 +2,6 @@ package bluesteel42.copperpipes.block;
 
 import bluesteel42.copperpipes.entity.ModBlockEntities;
 import net.minecraft.block.*;
-import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.entity.*;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -20,10 +19,9 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.WorldEvents;
-import net.minecraft.util.math.BlockPointer;
 import org.jetbrains.annotations.Nullable;
 
-public class CopperPipeBlockEntity extends DispenserBlockEntity implements SidedInventory {
+public class CopperPipeBlockEntity extends LootableContainerBlockEntity implements SidedInventory {
     public static final int TRANSFER_COOLDOWN = 8;
     public static final int INVENTORY_SIZE = 5;
     private static final int[][] AVAILABLE_SLOTS_CACHE = new int[54][];
@@ -32,7 +30,7 @@ public class CopperPipeBlockEntity extends DispenserBlockEntity implements Sided
     private int transferCooldown = -1;
     private long lastTickTime;
     private Direction facing;
-    private static final DispenserBehavior BEHAVIOR = new ItemPipeDropBehavior();
+    private static final ItemPipeDropBehavior BEHAVIOR = new ItemPipeDropBehavior();
 
     public CopperPipeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PIPE_BLOCK, pos, state);
@@ -329,12 +327,7 @@ public class CopperPipeBlockEntity extends DispenserBlockEntity implements Sided
             return false;
         }
 
-        BlockPointer blockPointer = new BlockPointer(
-                serverWorld,
-                pos,
-                world.getBlockState(pos),
-                blockEntity
-        );
+        PipeBlockPointer blockPointer = new PipeBlockPointer(serverWorld, pos, world.getBlockState(pos));
 
         // Dispense the item
         ItemStack dispensedStack = BEHAVIOR.dispense(blockPointer, itemStack.copyWithCount(1));
@@ -350,7 +343,6 @@ public class CopperPipeBlockEntity extends DispenserBlockEntity implements Sided
         }
     }
 
-    @Override
     public int chooseNonEmptySlot(Random random) {
         this.generateLoot(null);
         int i = -1;
