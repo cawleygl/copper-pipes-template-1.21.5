@@ -18,13 +18,13 @@ public class ItemPipeDropBehavior implements DispenserBehavior {
     public ItemStack dispense(BlockPointer blockPointer, ItemStack itemStack) {
         ItemStack itemStack2 = this.dispenseSilently(blockPointer, itemStack);
         this.playSound(blockPointer);
-        this.spawnParticles(blockPointer, blockPointer.state().get(PipeBlock.FACING));
+        this.spawnParticles(blockPointer, blockPointer.state().get(CopperPipeBlock.FACING));
         return itemStack2;
     }
 
     protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-        Direction direction = pointer.state().get(PipeBlock.FACING);
-        Position position = PipeBlock.getOutputLocation(pointer);
+        Direction direction = pointer.state().get(CopperPipeBlock.FACING);
+        Position position = CopperPipeBlock.getOutputLocation(pointer);
         ItemStack itemStack = stack.split(1);
         spawnItem(pointer.world(), itemStack, 6, direction, position);
         return stack;
@@ -52,7 +52,7 @@ public class ItemPipeDropBehavior implements DispenserBehavior {
 
     protected void playSound(BlockPointer pointer) {
         World world = pointer.world();
-        if (!world.isClient) {
+        if (!world.isClient()) {
             // Play a custom sound
             world.playSound(
                     null,

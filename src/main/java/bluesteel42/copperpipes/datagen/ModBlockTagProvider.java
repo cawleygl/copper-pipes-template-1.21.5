@@ -16,17 +16,17 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        getOrCreateTagBuilder(ModTags.Blocks.COPPER_PIPES)
-                .add(ModBlocks.PIPE)
-                .add(ModBlocks.EXPOSED_PIPE)
-                .add(ModBlocks.WEATHERED_PIPE)
-                .add(ModBlocks.OXIDIZED_PIPE)
-                .add(ModBlocks.WAXED_PIPE)
-                .add(ModBlocks.WAXED_EXPOSED_PIPE)
-                .add(ModBlocks.WAXED_WEATHERED_PIPE)
-                .add(ModBlocks.WAXED_OXIDIZED_PIPE);
+        valueLookupBuilder(ModTags.Blocks.COPPER_PIPES)
+                .add(ModBlocks.COPPER_PIPE)
+                .add(ModBlocks.EXPOSED_COPPER_PIPE)
+                .add(ModBlocks.WEATHERED_COPPER_PIPE)
+                .add(ModBlocks.OXIDIZED_COPPER_PIPE)
+                .add(ModBlocks.WAXED_COPPER_PIPE)
+                .add(ModBlocks.WAXED_EXPOSED_COPPER_PIPE)
+                .add(ModBlocks.WAXED_WEATHERED_COPPER_PIPE)
+                .add(ModBlocks.WAXED_OXIDIZED_COPPER_PIPE);
 
-        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).addTag(ModTags.Blocks.COPPER_PIPES);
+        valueLookupBuilder(BlockTags.PICKAXE_MINEABLE).addTag(ModTags.Blocks.COPPER_PIPES);
 
     }
 }

@@ -9,9 +9,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +23,7 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.util.math.BlockPointer;
 import org.jetbrains.annotations.Nullable;
 
-public class PipeBlockEntity extends DispenserBlockEntity {
+public class CopperPipeBlockEntity extends DispenserBlockEntity implements SidedInventory {
     public static final int TRANSFER_COOLDOWN = 8;
     public static final int INVENTORY_SIZE = 5;
     private static final int[][] AVAILABLE_SLOTS_CACHE = new int[54][];
@@ -34,30 +34,30 @@ public class PipeBlockEntity extends DispenserBlockEntity {
     private Direction facing;
     private static final DispenserBehavior BEHAVIOR = new ItemPipeDropBehavior();
 
-    public PipeBlockEntity(BlockPos pos, BlockState state) {
+    public CopperPipeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PIPE_BLOCK, pos, state);
-        this.facing = state.get(PipeBlock.FACING);
+        this.facing = state.get(CopperPipeBlock.FACING);
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
-        super.readNbt(nbt, registries);
+    protected void readData(ReadView view) {
+        super.readData(view);
         this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
-        if (!this.readLootTable(nbt)) {
-            Inventories.readNbt(nbt, this.inventory, registries);
+        if (!this.readLootTable(view)) {
+            Inventories.readData(view, this.inventory);
         }
 
-        this.transferCooldown = nbt.getInt("TransferCooldown", -1);
+        this.transferCooldown = view.getInt("TransferCooldown", -1);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
-        super.writeNbt(nbt, registries);
-        if (!this.writeLootTable(nbt)) {
-            Inventories.writeNbt(nbt, this.inventory, registries);
+    protected void writeData(WriteView view) {
+        super.writeData(view);
+        if (!this.writeLootTable(view)) {
+            Inventories.writeData(view, this.inventory);
         }
 
-        nbt.putInt("TransferCooldown", this.transferCooldown);
+        view.putInt("TransferCooldown", this.transferCooldown);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PipeBlockEntity extends DispenserBlockEntity {
     @Override
     public void setCachedState(BlockState state) {
         super.setCachedState(state);
-        this.facing = state.get(PipeBlock.FACING);
+        this.facing = state.get(CopperPipeBlock.FACING);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class PipeBlockEntity extends DispenserBlockEntity {
         return Text.translatable("container.pipe");
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, PipeBlockEntity blockEntity) {
+    public static void serverTick(World world, BlockPos pos, BlockState state, CopperPipeBlockEntity blockEntity) {
         blockEntity.transferCooldown--;
         blockEntity.lastTickTime = world.getTime();
         if (!blockEntity.needsCooldown()) {
@@ -98,11 +98,11 @@ public class PipeBlockEntity extends DispenserBlockEntity {
         }
     }
 
-    private static boolean insertOnly(World world, BlockPos pos, BlockState state, PipeBlockEntity blockEntity) {
-        if (world.isClient) {
+    private static boolean insertOnly(World world, BlockPos pos, BlockState state, CopperPipeBlockEntity blockEntity) {
+        if (world.isClient()) {
             return false;
         } else {
-            if (!blockEntity.needsCooldown() && (Boolean)state.get(PipeBlock.ENABLED)) {
+            if (!blockEntity.needsCooldown() && (Boolean)state.get(CopperPipeBlock.ENABLED)) {
                 if (!blockEntity.isEmpty() && insert(world, pos, blockEntity)) {
                     blockEntity.setTransferCooldown(8);
                     markDirty(world, pos, state);
@@ -114,7 +114,7 @@ public class PipeBlockEntity extends DispenserBlockEntity {
         }
     }
 
-    private static boolean insert(World world, BlockPos pos, PipeBlockEntity blockEntity) {
+    private static boolean insert(World world, BlockPos pos, CopperPipeBlockEntity blockEntity) {
         Inventory inventory = getOutputInventory(world, pos, blockEntity);
         BlockPos blockFacingPos = pos.offset(blockEntity.facing, 1);
         if (inventory != null) {
@@ -235,9 +235,9 @@ public class PipeBlockEntity extends DispenserBlockEntity {
             }
 
             if (bl) {
-                if (bl2 && to instanceof PipeBlockEntity pipeBlockEntity && !pipeBlockEntity.isDisabled()) {
+                if (bl2 && to instanceof CopperPipeBlockEntity pipeBlockEntity && !pipeBlockEntity.isDisabled()) {
                     int j = 0;
-                    if (from instanceof PipeBlockEntity pipeBlockEntity2 && pipeBlockEntity.lastTickTime >= pipeBlockEntity2.lastTickTime) {
+                    if (from instanceof CopperPipeBlockEntity pipeBlockEntity2 && pipeBlockEntity.lastTickTime >= pipeBlockEntity2.lastTickTime) {
                         j = 1;
                     }
 
@@ -252,7 +252,7 @@ public class PipeBlockEntity extends DispenserBlockEntity {
     }
 
     @Nullable
-    private static Inventory getOutputInventory(World world, BlockPos pos, PipeBlockEntity blockEntity) {
+    private static Inventory getOutputInventory(World world, BlockPos pos, CopperPipeBlockEntity blockEntity) {
         return getInventoryAt(world, pos.offset(blockEntity.facing));
     }
 
@@ -313,7 +313,7 @@ public class PipeBlockEntity extends DispenserBlockEntity {
         return new PipeScreenHandler(syncId, playerInventory, this);
     }
 
-    private static boolean dropItem(World world, BlockPos pos, PipeBlockEntity blockEntity) {
+    private static boolean dropItem(World world, BlockPos pos, CopperPipeBlockEntity blockEntity) {
         if (!(world instanceof ServerWorld serverWorld)) {
             return false;
         }
@@ -363,5 +363,20 @@ public class PipeBlockEntity extends DispenserBlockEntity {
         }
 
         return i;
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return indexArray(this.size());
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return true;
     }
 }

@@ -5,14 +5,14 @@ import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 
 public class ModRegistries {
     public static void registerOxidizables() {
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.PIPE, ModBlocks.EXPOSED_PIPE);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_PIPE, ModBlocks.WEATHERED_PIPE);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.WEATHERED_PIPE, ModBlocks.OXIDIZED_PIPE);
+        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.COPPER_PIPE, ModBlocks.EXPOSED_COPPER_PIPE);
+        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_COPPER_PIPE, ModBlocks.WEATHERED_COPPER_PIPE);
+        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.WEATHERED_COPPER_PIPE, ModBlocks.OXIDIZED_COPPER_PIPE);
 
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.PIPE, ModBlocks.WAXED_PIPE);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.EXPOSED_PIPE, ModBlocks.WAXED_EXPOSED_PIPE);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.WEATHERED_PIPE, ModBlocks.WAXED_WEATHERED_PIPE);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.OXIDIZED_PIPE, ModBlocks.WAXED_OXIDIZED_PIPE);
+        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.COPPER_PIPE, ModBlocks.WAXED_COPPER_PIPE);
+        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.EXPOSED_COPPER_PIPE, ModBlocks.WAXED_EXPOSED_COPPER_PIPE);
+        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.WEATHERED_COPPER_PIPE, ModBlocks.WAXED_WEATHERED_COPPER_PIPE);
+        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.OXIDIZED_COPPER_PIPE, ModBlocks.WAXED_OXIDIZED_COPPER_PIPE);
 
     }
 }

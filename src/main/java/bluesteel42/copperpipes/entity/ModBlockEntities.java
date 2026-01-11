@@ -2,7 +2,7 @@ package bluesteel42.copperpipes.entity;
 
 import bluesteel42.copperpipes.CopperPipes;
 import bluesteel42.copperpipes.block.ModBlocks;
-import bluesteel42.copperpipes.block.PipeBlockEntity;
+import bluesteel42.copperpipes.block.CopperPipeBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
@@ -11,18 +11,18 @@ import net.minecraft.util.Identifier;
 
 public class ModBlockEntities {
 
-    public static final BlockEntityType<PipeBlockEntity> PIPE_BLOCK = register(
+    public static final BlockEntityType<CopperPipeBlockEntity> PIPE_BLOCK = register(
             "pipe_block",
             FabricBlockEntityTypeBuilder.create(
-                    PipeBlockEntity::new,
-                    ModBlocks.PIPE,
-                    ModBlocks.EXPOSED_PIPE,
-                    ModBlocks.WEATHERED_PIPE,
-                    ModBlocks.OXIDIZED_PIPE,
-                    ModBlocks.WAXED_PIPE,
-                    ModBlocks.WAXED_EXPOSED_PIPE,
-                    ModBlocks.WAXED_WEATHERED_PIPE,
-                    ModBlocks.WAXED_OXIDIZED_PIPE
+                    CopperPipeBlockEntity::new,
+                    ModBlocks.COPPER_PIPE,
+                    ModBlocks.EXPOSED_COPPER_PIPE,
+                    ModBlocks.WEATHERED_COPPER_PIPE,
+                    ModBlocks.OXIDIZED_COPPER_PIPE,
+                    ModBlocks.WAXED_COPPER_PIPE,
+                    ModBlocks.WAXED_EXPOSED_COPPER_PIPE,
+                    ModBlocks.WAXED_WEATHERED_COPPER_PIPE,
+                    ModBlocks.WAXED_OXIDIZED_COPPER_PIPE
             ).build()
     );
 

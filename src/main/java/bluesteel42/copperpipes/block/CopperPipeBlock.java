@@ -13,6 +13,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
@@ -39,11 +40,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
-    public static final MapCodec<OxidizablePipeBlock> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> instance.group(OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(Degradable::getDegradationLevel), createSettingsCodec())
-                    .apply(instance, OxidizablePipeBlock::new)
+public class CopperPipeBlock extends BlockWithEntity {
+    public static final MapCodec<CopperPipeBlock> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                            Oxidizable.OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(CopperPipeBlock::getOxidationLevel),
+                            createSettingsCodec()
+                    )
+                    .apply(instance, CopperPipeBlock::new)
     );
     public static final BooleanProperty NORTH = Properties.NORTH;
     public static final BooleanProperty EAST = Properties.EAST;
@@ -56,14 +61,14 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
     public static final EnumProperty<Direction> FACING = Properties.HOPPER_FACING;
     public static final BooleanProperty ENABLED = Properties.ENABLED;
     private final Function<BlockState, VoxelShape> shapeFunction;
-    private final OxidationLevel oxidationLevel;
+    private final Oxidizable.OxidationLevel oxidationLevel;
 
     @Override
-    public MapCodec<OxidizablePipeBlock> getCodec() {
+    public MapCodec<? extends CopperPipeBlock> getCodec() {
         return CODEC;
     }
 
-    public OxidizablePipeBlock(OxidationLevel oxidationLevel, Settings settings) {
+    public CopperPipeBlock(Oxidizable.OxidationLevel oxidationLevel, AbstractBlock.Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.DOWN).with(ENABLED, true));
         this.shapeFunction = this.createShapeFunction();
@@ -110,37 +115,22 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
         return (VoxelShape)this.shapeFunction.apply(state);
     }
 
+    private static BlockState modifyBlockStateFromInputDirection(BlockState pipeState, BooleanProperty pipeDirectionProperty, BlockState neighborState, Direction neighborDirection, Direction pipeDirection) {
+        if (neighborState.isIn(ModTags.Blocks.COPPER_PIPES) || neighborState.isOf(Blocks.HOPPER)) {
+            pipeState = pipeState.with(pipeDirectionProperty, neighborState.get(FACING).equals(neighborDirection) && !pipeState.get(FACING).equals(pipeDirection));
+        } else {
+            pipeState = pipeState.with(pipeDirectionProperty, false);
+        }
+        return pipeState;
+    }
+
     public static BlockState withInputProperties(BlockView world, BlockPos pos, BlockState state) {
-        BlockState blockState2 = world.getBlockState(pos.up());
-        BlockState blockState3 = world.getBlockState(pos.north());
-        BlockState blockState4 = world.getBlockState(pos.east());
-        BlockState blockState5 = world.getBlockState(pos.south());
-        BlockState blockState6 = world.getBlockState(pos.west());
-        if (blockState2.isIn(ModTags.Blocks.COPPER_PIPES)  || blockState2.isOf(Blocks.HOPPER)) {
-            state = state.with(UP, blockState2.get(FACING).equals(Direction.DOWN));
-        } else {
-            state = state.with(UP, false);
-        }
-        if (blockState3.isIn(ModTags.Blocks.COPPER_PIPES)  || blockState3.isOf(Blocks.HOPPER)) {
-            state = state.with(NORTH, blockState3.get(FACING).equals(Direction.SOUTH) && !state.get(FACING).equals(Direction.NORTH));
-        } else {
-            state = state.with(NORTH, false);
-        }
-        if (blockState4.isIn(ModTags.Blocks.COPPER_PIPES)  || blockState4.isOf(Blocks.HOPPER)) {
-            state = state.with(EAST, blockState4.get(FACING).equals(Direction.WEST) && !state.get(FACING).equals(Direction.EAST));
-        } else {
-            state = state.with(EAST, false);
-        }
-        if (blockState5.isIn(ModTags.Blocks.COPPER_PIPES)  || blockState5.isOf(Blocks.HOPPER)) {
-            state = state.with(SOUTH, blockState5.get(FACING).equals(Direction.NORTH) && !state.get(FACING).equals(Direction.SOUTH));
-        } else {
-            state = state.with(SOUTH, false);
-        }
-        if (blockState6.isIn(ModTags.Blocks.COPPER_PIPES)  || blockState6.isOf(Blocks.HOPPER)) {
-            state = state.with(WEST, blockState6.get(FACING).equals(Direction.EAST) && !state.get(FACING).equals(Direction.WEST));
-        } else {
-            state = state.with(WEST, false);
-        }
+        state = modifyBlockStateFromInputDirection(state, UP, world.getBlockState(pos.up()), Direction.DOWN, Direction.UP);
+        state = modifyBlockStateFromInputDirection(state, NORTH, world.getBlockState(pos.north()), Direction.SOUTH, Direction.NORTH);
+        state = modifyBlockStateFromInputDirection(state, EAST, world.getBlockState(pos.east()), Direction.WEST, Direction.EAST);
+        state = modifyBlockStateFromInputDirection(state, SOUTH, world.getBlockState(pos.south()), Direction.NORTH, Direction.SOUTH);
+        state = modifyBlockStateFromInputDirection(state, WEST, world.getBlockState(pos.west()), Direction.EAST, Direction.WEST);
+
         return state;
     }
 
@@ -152,13 +142,13 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PipeBlockEntity(pos, state);
+        return new CopperPipeBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient ? null : validateTicker(type, ModBlockEntities.PIPE_BLOCK, PipeBlockEntity::serverTick);
+        return world.isClient() ? null : validateTicker(type, ModBlockEntities.PIPE_BLOCK, CopperPipeBlockEntity::serverTick);
     }
 
     @Override
@@ -170,7 +160,7 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient && world.getBlockEntity(pos) instanceof PipeBlockEntity pipeBlockEntity) {
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof CopperPipeBlockEntity pipeBlockEntity) {
             player.openHandledScreen(pipeBlockEntity);
             player.incrementStat(Stats.INSPECT_HOPPER);
         }
@@ -222,7 +212,7 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
     protected boolean hasComparatorOutput(BlockState state) { return true; }
 
     @Override
-    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+    protected int getComparatorOutput(BlockState state, World world, BlockPos pos, Direction direction) {
         return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
     }
 
@@ -260,18 +250,15 @@ public class OxidizablePipeBlock extends BlockWithEntity implements Oxidizable {
                 );
     }
 
-    @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        this.tickDegradation(state, world, pos, random);
-    }
-
-    @Override
-    protected boolean hasRandomTicks(BlockState state) {
-        return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
-    }
-
-    public OxidationLevel getDegradationLevel() {
+    public Oxidizable.OxidationLevel getOxidationLevel() {
         return this.oxidationLevel;
+    }
+
+    public boolean isWaxed() { return true; }
+
+    @Override
+    public boolean keepBlockEntityWhenReplacedWith(BlockState state) {
+        return state.isIn(ModTags.Blocks.COPPER_PIPES);
     }
 
 }

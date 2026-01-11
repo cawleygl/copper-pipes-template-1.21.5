@@ -1,4 +1,4 @@
-// 1.21.5	-999999999-01-01T00:00:00	Copper Pipes/Block Loot Tables
+// 1.21.10	-999999999-01-01T00:00:00	Copper Pipes/Block Loot Tables
 db54f54bf7348ae1508bed6eb71f11e92dba96ff data/copper-pipes/loot_table/blocks/exposed_pipe.json
 93a862e4e5f9f2595b3a27af40f0af13d2257068 data/copper-pipes/loot_table/blocks/oxidized_pipe.json
 2619c8ed4a256a6775d72e678c8ceb267d17e2a8 data/copper-pipes/loot_table/blocks/pipe.json

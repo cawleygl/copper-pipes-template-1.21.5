@@ -14,13 +14,13 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        addDrop(ModBlocks.PIPE);
-        addDrop(ModBlocks.EXPOSED_PIPE);
-        addDrop(ModBlocks.WEATHERED_PIPE);
-        addDrop(ModBlocks.OXIDIZED_PIPE);
-        addDrop(ModBlocks.WAXED_PIPE);
-        addDrop(ModBlocks.WAXED_EXPOSED_PIPE);
-        addDrop(ModBlocks.WAXED_WEATHERED_PIPE);
-        addDrop(ModBlocks.WAXED_OXIDIZED_PIPE);
+        addDrop(ModBlocks.COPPER_PIPE);
+        addDrop(ModBlocks.EXPOSED_COPPER_PIPE);
+        addDrop(ModBlocks.WEATHERED_COPPER_PIPE);
+        addDrop(ModBlocks.OXIDIZED_COPPER_PIPE);
+        addDrop(ModBlocks.WAXED_COPPER_PIPE);
+        addDrop(ModBlocks.WAXED_EXPOSED_COPPER_PIPE);
+        addDrop(ModBlocks.WAXED_WEATHERED_COPPER_PIPE);
+        addDrop(ModBlocks.WAXED_OXIDIZED_COPPER_PIPE);
     }
 }

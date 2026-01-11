@@ -6,7 +6,6 @@ import bluesteel42.copperpipes.entity.ModBlockEntities;
 import bluesteel42.copperpipes.registries.ModRegistries;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureSet;
@@ -14,9 +13,6 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static bluesteel42.copperpipes.block.ModBlocks.PIPE;
-import static net.minecraft.block.entity.StructureBoxRendering.RenderMode.BOX;
 
 public class CopperPipes implements ModInitializer {
 	public static final String MOD_ID = "copper-pipes";
